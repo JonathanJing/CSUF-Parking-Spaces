@@ -12,9 +12,6 @@ tags = soup('td')
 for tag in tags:
     #name = tag.find('a')
     #num = tag.find('span')
-    
-    #time = tag.find_all('span')
-    #time = tag.find('p',class_='LastUpdated')
    
     content = tag.get_text()
     content = content.strip()
