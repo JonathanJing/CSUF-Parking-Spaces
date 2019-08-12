@@ -1,32 +1,18 @@
 import re
 import urllib.request as ur
+from datetime import datetime
 from bs4 import BeautifulSoup
-
 
 url = 'https://parking.fullerton.edu/ParkingLotCounts/mobile.aspx'
 html = ur.urlopen(url).read()
 soup = BeautifulSoup(html, "html.parser")
-tags = soup('td')
-   
 
-for tag in tags:
-    #name = tag.find('a')
-    #num = tag.find('span')
-   
-    content = tag.get_text()
-    content = content.strip()
-    content = content.split('\n')
-    
-    #if re.findall('Structure',name.contents[0]):
-      #print(name.contents[0])
-    #if re.findall('[0-9]',num.contents[0]):
-      #print(num.contents[0])
-      
-    if re.findall('[a-z]',content[0]):
-      print(content[0]) #Name
-      print('Total:',content[2]) #Total Available
-      u_time = content[3]
-      #print(content[3]) #Upload time
-    if re.findall('[0-9]',content[0]):
-      print('Current:',content[0]) #Current Available
-      print(u_time,'\n')
+for name in soup.find_all(id='gvAvailability_HyperLink_LocationName_0'):
+  print(name.text)
+for time in soup.find_all(id='gvAvailability_Label_LastUpdated_0'):
+  print(time.text)
+  datetime_str = time.text
+  datetime_object = datetime.strptime(datetime_str, '%m/%d/%Y %I:%M:%S %p')
+  print(datetime_object)
+for available in soup.find_all(id='gvAvailability_Label_Available_0'):
+  print(available.text)
