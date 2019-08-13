@@ -18,7 +18,7 @@ cur = mydb.cursor()
 
 #cur.execute("DROP TABLE IF EXISTS Parking")
 
-#cur.execute("CREATE TABLE Parking (Name VARCHAR(30), Available INTEGER, Time TIME)")
+#cur.execute("CREATE TABLE Parking (Name VARCHAR(30), Available INTEGER, Time DATETIME)")
 
 class rec_data:
   def __init__(self,building_id):
@@ -32,7 +32,7 @@ class rec_data:
       print(datetime_object)
     for available in soup.find_all(id='gvAvailability_Label_Available_'+ self.i):
       print(available.text)
-    sql = "INSERT INTO Parking (Name, Available, Time) VALUES (%s,%s,%s)"
+    sql = "INSERT IGNORE INTO Parking (Name, Available, Time) VALUES (%s,%s,%s)"
     val = (name.text, available.text, datetime_object)
     cur.execute(sql, val)
     mydb.commit()
