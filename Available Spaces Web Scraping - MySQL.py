@@ -1,7 +1,9 @@
+import os
 import urllib.request as ur
 from datetime import datetime
 from bs4 import BeautifulSoup
 import mysql.connector
+from apscheduler.schedulers.blocking import BlockingScheduler
 
 #Web
 url = 'https://parking.fullerton.edu/ParkingLotCounts/mobile.aspx'
@@ -37,9 +39,18 @@ class rec_data:
     cur.execute(sql, val)
     mydb.commit()
 
-loop = ['0','1','2']
-for i in loop:
-  p1 = rec_data(i)
-  p1.data()
+def tick():
+    loop = ['0','1','2']
+    for i in loop:
+        p1 = rec_data(i)
+        p1.data()
 
-cur.close()
+if __name__ == '__main__':
+    scheduler = BlockingScheduler()
+    scheduler.add_job(tick, 'interval', seconds=90)
+    print('Press Ctrl+C to exit')
+try:
+    scheduler.start()
+except (KeyboardInterrupt, SystemExit):
+    cur.close()
+    pass
